@@ -3,8 +3,8 @@
 标签（空格分隔）： 小知识
 
 ---
-
-- 需要屏蔽的网页的最顶层 `<div class="scroll"></div>`
+### 平时的屏蔽也会屏蔽掉页面内部的滚动事件
+- 需要滚动的div加上 `<div class="scroll"></div>`
 ```
 var overscroll = function(el) {
   el.addEventListener('touchstart', function() {
