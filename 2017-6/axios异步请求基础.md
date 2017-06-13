@@ -68,11 +68,7 @@ axios.all([
 数据格式
 {page:1,city:["郑州","北京"]}
 
-axios.post(url, json, {
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
-}).then(response => response.data)
+axios.post(url, json).then(response => response.data)
   .then(data => {
     console.log(data);
   });
