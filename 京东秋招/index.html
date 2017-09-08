@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  body,html{
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #000000;
+  }
+  table{
+      border-collapse: collapse;
+      width: 100%;
+      table-layout: fixed;
+  }
+  thead{
+      background: #3d444c;
+      color: #ffffff;
+  }
+  td,th{
+      border: 1px solid #e1e1e1;
+      padding: 0;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+  }
+  </style>
+</head>
+<body>
+    <table id="jsTrolley">
+        <thead><tr><th>名称</th><th>价格</th><th>操作</th></tr></thead>
+        <tbody>
+            <tr><td>产品1</td><td>10.00</td><td><a href="javascript:void(0);">删除</a></td></tr>
+            <tr><td>产品2</td><td>30.20</td><td><a href="javascript:void(0);">删除</a></td></tr>
+            <tr><td>产品3</td><td>20.50</td><td><a href="javascript:void(0);">删除</a></td></tr>
+        </tbody>
+        <tfoot><tr><th>总计</th><td colspan="2">60.70(3件商品)</td></tr></tfoot>
+    </table>
+<script>
+var array = [{name:"产品4",price:"30"},{name:"产品5",price:"20"}]
+
+
+var table = document.getElementsByTagName("body")[0];
+var tBody = document.getElementsByTagName("tbody")[0];
+var addGood = document.createElement("a");
+addGood.href = "javascript:void(0)";
+addGood.id = "add";
+addGood.appendChild(document.createTextNode("增加"));
+table.appendChild(addGood);
+
+var addBtn = document.getElementById("add");
+addBtn.onclick = function(){
+  add(array);
+}
+
+function add(items) {
+    for(var i=0;i<items.length;i++){
+      
+      var tr = document.createElement("tr");
+      var productTd = document.createElement("td");
+      productTd.appendChild(document.createTextNode(""+items[i].name));
+      tr.appendChild(productTd);
+
+      var priceTd = document.createElement("td");
+      priceTd.appendChild(document.createTextNode(""+items[i].price));
+      tr.appendChild(priceTd);
+
+      var delTd = document.createElement("td");
+      var delA = document.createElement('a');
+      delA.href = "javascript:void(0)";
+      delA.appendChild(document.createTextNode("删除"));
+      delTd.appendChild(delA);
+      tr.appendChild(delTd);
+
+      tBody.appendChild(tr);
+    }
+    
+}
+
+var del = tBody.getElementsByTagName("a");
+for(var i=1;i<del.length;i++){
+  tBody.onclick = function(ev){
+    var ev = ev||window.event;
+    var target = ev.target||ev.srcElement;
+    // alert(target.innerHTML);
+    if(target.nodeName.toLowerCase() == 'a'){
+      bind(target);
+    }  
+  }
+}
+function bind(item) {
+  item.parentNode.parentNode.parentNode.removeChild(item.parentNode.parentNode);
+}
+
+</script>
+</body>
+</html>
