@@ -41,7 +41,7 @@
         <tfoot><tr><th>总计</th><td colspan="2">60.70(3件商品)</td></tr></tfoot>
     </table>
 <script>
-var array = [{name:"产品4",price:"30"},{name:"产品5",price:"20"}]
+var array = [{name:"产品4",price:30},{name:"产品5",price:20}]
 
 
 var table = document.getElementsByTagName("body")[0];
@@ -59,14 +59,13 @@ addBtn.onclick = function(){
 
 function add(items) {
     for(var i=0;i<items.length;i++){
-      
       var tr = document.createElement("tr");
       var productTd = document.createElement("td");
       productTd.appendChild(document.createTextNode(""+items[i].name));
       tr.appendChild(productTd);
 
       var priceTd = document.createElement("td");
-      priceTd.appendChild(document.createTextNode(""+items[i].price));
+      priceTd.appendChild(document.createTextNode(items[i].price.toFixed(2)));
       tr.appendChild(priceTd);
 
       var delTd = document.createElement("td");
@@ -78,7 +77,20 @@ function add(items) {
 
       tBody.appendChild(tr);
     }
+    totalNum();
     
+}
+
+function totalNum(){
+  var haveTr = document.getElementsByTagName("tr")
+  var total = 0;
+  for(var i=1;i<haveTr.length-1;i++){
+    var goodPrice = parseFloat(haveTr[i].childNodes[1].innerHTML);
+    // console.log(parseInt(haveTr[i].childNodes[1].innerHTML));
+    total+=goodPrice;
+  }
+  var tfoot = document.getElementsByTagName("tfoot");
+  tfoot[0].childNodes[0].childNodes[1].innerHTML=total.toFixed(2)+"（"+(haveTr.length-2)+"件商品）"
 }
 
 var del = tBody.getElementsByTagName("a");
@@ -94,6 +106,7 @@ for(var i=1;i<del.length;i++){
 }
 function bind(item) {
   item.parentNode.parentNode.parentNode.removeChild(item.parentNode.parentNode);
+  totalNum();
 }
 
 </script>
