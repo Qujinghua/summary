@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function test(str){
+			var str = str.split("");
+			var arr = [];
+			var len = str.length;
+
+			for(var i=0;i<str.length;i++){
+				if(str[i] != str[i+1]){
+					arr.push(str.splice(0,i+1));
+					i = -1;
+				}
+			}
+			console.log((len/arr.length).toFixed(2));
+		}
+		test("aabbbcddaaaeeeeh");
+	</script>
+</body>
+</html>
