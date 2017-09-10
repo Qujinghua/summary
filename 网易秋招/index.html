@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+  // var str = "ABAB";
+  // var strarr = str.split("");
+  // var obj={};
+  // var allow=true;
+  // var count=0;
+  // for(var i=0;i<strarr.length;i++){
+  //   if(obj[strarr[i]]){
+  //     obj[strarr[i]]++;
+  //   }else{
+  //     obj[strarr[i]]=1;
+  //     count++
+  //   }
+  //   if(count>2){
+  //     allow=false;
+  //     break;
+  //   }
+  // }
+  // if(allow){
+  //   if(count==1){
+  //     console.log(1)
+  //   }else{
+  //     console.log(2)
+  //   }
+  // }else{
+  //   console.log(0)
+  // }
+
+//     var line = "010001111101010101"
+//     var len = line.length;
+//     if(len<=1){
+//         console.log(len);
+//     }else{
+//         var k=1;
+//         var max=1;
+//         for(var i=0; i<line.length-1; i++){
+//             if(line[i] !== line[i+1]){
+//                 k++;
+//             }else{
+//                 k=1;
+//             }
+//             if(k > max){
+//                 max = k;
+//             }
+//         }
+//         console.log(max);      
+//     } 
+
+
+//     var line = "3 5 100 10"
+//     var lines = line.trim().split(' ');
+//     var arr = lines.map(function(item){
+//         return parseInt(item);
+//     });
+//     var x = arr[0],
+//         f = arr[1],
+//         d = arr[2],
+//         p = arr[3];
+//     if(Math.floor(d/x)<=f){
+//         console.log(Math.floor(d/x));
+//     }else{
+//         console.log(Math.floor((d-f*x)/(x+p))+f);
+//     }
+
+// var line = 21;
+// var num = parseInt(line);
+// var str = [];
+// if(num==1){
+//   console.log("1")
+// }else{
+//     if(num%2==0){
+//       while(num>=1){
+//         str.push(2);
+//         num=(num-2)/2;
+//         if(num==1){
+//           str.push(1);
+//         }
+//       }  
+//     }else{
+      
+//       str.push(1);
+//       num=(num-1)/2;
+//         while(num>=1){
+//           str.push(2);
+//           num=(num-2)/2;
+//           if(num==1){
+//             str.push(1);
+//           }
+//         }
+//     }
+//   console.log(str.reverse().join(""));
+// }
+
+// var line = 'aaabbaaac';
+// var inputStr = line.trim();
+// var lengthArr = {};
+// var count = 0;
+// for(var i=0;i<inputStr.length;i++){
+//   if(lengthArr[inputStr[i]]){
+//     lengthArr[inputStr[i]]++;
+//   }else{
+//     lengthArr[inputStr[i]] = 1;
+//     count++;
+//   }
+// }
+// console.log(lengthArr);
+// console.log(count);
+
+// var line = 'aaabbaaac';
+// var inputStr = line.split('');
+// console.log(inputStr);
+// var lengthArr = [];
+// var count = 0;
+// for(var i=0;i<inputStr.length;i++){
+//   if(inputStr[i]!=inputStr[i+1]){
+//     var delStr = inputStr.splice(0,i);
+//     console.log(delStr);
+//     lengthArr.push(delStr.length);
+//     count++;
+//   }
+// }
+// console.log(lengthArr);
+// console.log(count);
+
+
+  </script>
+</body>
+</html>
