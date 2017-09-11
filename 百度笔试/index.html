@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- <style>
+  #demo {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    position: relative;
+    border: 2px solid #333;
+}
+ 
+#demo:after, #demo:before {
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    left: 100%;
+    position: absolute;
+    width: 0;
+}
+ 
+#demo:after {
+    border-width: 10px;
+    border-left-color: #fff;
+    top: 20px;
+}
+ 
+#demo:before {
+    border-width: 12px;
+    border-left-color: #000;
+    top: 18px;
+}
+  </style> -->
+</head>
+<body>
+    <div id="jsContainer">
+    这里会给出一段随机文本，可能包含一些链接，比如https://www.baidu.com，或者 www.baidu.com?from=onlineExam，如果出现链接文本，请给该链接文本加上链接标签，用户点击后能直接在新窗口中打开该链接。
+    </div>
+<script>
+var text = document.getElementById("jsContainer").innerHTML;
+var str = /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&:\/~\+#]*[\w\-\@?^=%&\/~\+#])?$/g;
+
+console.log(str.test(text));
+
+// var str=']['
+// var arr = str.split('');
+// if(arr[0]==']'){
+//   arr.unshift('[');
+// }
+// var left = 0;
+// var right = 0;
+// for(var i=0;i<arr.length;i++){
+//   if(arr[i]=='['){
+//     left++;
+//   }else{
+//     right++;
+//   }
+// }
+</script>
+</body>
+</html>
