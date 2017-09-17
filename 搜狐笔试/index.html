@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  var str = '/a/./b/../../c/';
+  var arr = str.split('/');
+  var str2 = [];
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]=='..'&&arr[i]!=''){
+      str2.pop(arr[i]);
+    }else if(arr[i]!='..'&&arr[i]!='.'&&arr[i]!=''){
+      str2.push(arr[i]);
+    }
+  }
+  var output = [];
+  for(var i=0;i<str2.length;i++){
+    output.push('/');
+    output.push(str2[i]);
+  }
+  console.log(output.join(''));
+</script>
+</body>
+</html>
