@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<script>
+var str = 'a beautiful young beautiful lady beautiful had a beautiful helpful wonderful'
+var obj = {};
+function strFind(str1,str2){
+  var arr1 = str1.split(' ');
+  var len1 = arr1.length;
+  var arr2 = str2.split('');
+  var len2 = arr2.length;
+  for(var i=0;i<len1;i++){
+    var arr3 = arr1[i].split('');
+    var len3 = arr3.length;
+    if(len3>=len2){
+      for(var j=0;j<len2;j++){
+        if(arr3[len3-1-j]==arr2[len2-1-j]){
+          if(j == len3-1){
+            if(obj.arr1[i]){
+              obj.arr1[i] += 1;
+            }else{
+              obj.arr1[i] = 1;
+            }
+            break;
+          }
+        }
+      }
+    }
+    
+  }
+  return obj;
+}
+console.log(strFind(str,'ful'));
+</script>
+</body>
+</html>
