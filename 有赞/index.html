@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<script>
+  // var line = 'hi, I  am a robot.'
+  // var arr = line.split(' ');
+  // console.log(arr);
+  // var newArr = [];
+  // for(var i=arr.length-1;i>=0;i--){
+  //   if(arr[i]==''){
+  //     newArr.push(' ');
+  //   }else if(arr[i]=='.'||arr[i]==','){
+  //     newArr.push(arr[i]);
+  //   }else{
+  //     newArr.push(arr[i]);
+  //     newArr.push(' ');
+  //   }
+  // }
+  // console.log(newArr.join(''));
+  var line = 'hi, I  am a robot.'
+  var newArr;
+  for(var i=line.length;i>=0;i--){
+    if(getCode(line.charCodeAt(i))){
+      newArr += ''
+    }
+  }
+  function getCode(code){
+    if(code>=97&&code<=122){
+      return true;
+    }
+  }
+</script>
+</body>
+</html>
