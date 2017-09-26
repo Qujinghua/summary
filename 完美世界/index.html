@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<script>
+var arr = '12,23,32,12,12,43,54,32';
+var arr = arr.split(',');
+var obj = {};
+for(var i=0;i<arr.length;i++){
+  if(obj[arr[i]]){
+    obj[arr[i]] += 1;
+  }else{
+    obj[arr[i]] = 1;
+  }
+}
+var keys = Object.keys(obj)
+var count = 0, maxNum
+  for (var i=0,l = keys.length;i<l;i++) {
+    if (obj[keys[i]] > count) {
+      count = obj[keys[i]];
+      maxNum = keys[i];
+      }
+  }
+console.log(maxNum);
+
+</script>
+</body>
+</html>
