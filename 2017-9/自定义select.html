@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <title>custom select</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        /*customSelect*/
+        .custom-select-container {
+            width: 150px;
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 5px;
+            /*兼容IE6, 7*/
+            *display: inline;
+            *zoom: 1;
+
+            margin: 100px 0 0 100px; 
+        }
+        .custom-select-input {
+            width: 120px;
+            padding-right: 28px;
+            height: 30px;
+            line-height: 30px;    
+            font-size: 14px;
+            text-indent: 5px;
+            *margin-left: -5px;
+            border: none 0;
+            outline: none;
+        }
+        .custom-select-input-wrap {
+            position: relative;
+            width: 148px;
+            height: 30px;
+            overflow: hidden;
+            border: 1px solid #aaa;
+        }
+        .list-toggle-trigger {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 10px;
+            background-color: #fff;
+        }
+        .list-toggle-trigger i {
+            display: block;
+            width: 0;
+            height: 0;
+            border-width: 8px 5px 5px;
+            border-style: solid;
+            border-color: #aaa transparent transparent transparent;
+        }
+        .list-toggle-trigger.active {
+            padding-top: 4px;
+        }
+        .list-toggle-trigger.active i {
+            border-width: 5px 5px 8px;
+            border-color: transparent transparent #aaa transparent;    
+        }
+        .custom-select-list {
+            min-width: 120px;
+            max-height: 400px;
+            overflow-y: auto;    
+            border: 1px solid #006ed5;
+            position: absolute;
+            left: 0;
+            top: 32px;
+            z-index: 100;
+            background-color: #FFF;
+            display: none;
+        }
+        .custom-select-list span {
+            display: block;
+            height: 24px;
+            line-height: 24px;
+            color: #000;
+            text-indent: 5px;
+            white-space: nowrap;
+            /*padding-right: 25px;*/
+        }
+        .custom-select-list span.hover {
+            color: #FFF;
+            background-color: #006ed5;
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="custom-select-container" data-name="oilBrand" data-default-value="品牌系列" data-placeholder="品牌系列">
+        <textarea style="display: none;">
+            [{"id": "1", "name": "1嘉实多级护全合成油SN级5W-30"}, {"id": "11", "name": "111嘉实多级护全合成油SN级5W-30"}, {"id": "2", "name": "2实多级护全合成油SN级5W-30"}, {"id": "3", "name": "3实多级护全合成油SN级5W-30"}, {"id": "4", "name": "4实多级护全合成油SN级5W-30"}, {"id": "5", "name": "5实多级护全合成油SN级5W-30"}, {"id": "6", "name": "6实多级护全合成油SN级5W-30"}]
+        </textarea>
+    </div>
+
+    <script>
+        (function($){
+            var jsonParse = window.JSON && JSON.parse ? JSON.parse : eval;
+
+            var addEvent;
+
+            if (document.body.addEventListener) {
+                addEvent = function(elem, type, eventHandler) {
+                    elem.addEventListener(type, eventHandler);
+                };
+            } else if (document.body.attachEvent) {
+                addEvent = function(elem, type, eventHandler) {
+                    elem.attachEvent('on' + type, eventHandler);
+                };
+            } else {
+                addEvent = function(elem, type, eventHandler) {
+                    elem['on' + type] = eventHandler;
+                };
+            }
+
+            /**
+             *  author: yangjunhua
+             *  email: 1025357509@qq.com
+             *  constructor: 
+             *      CustomSelect
+             *  params: 
+             *      options = {
+             *          container: selector,        // init container
+             *          change: function(value) {}  // it means select change handler
+             *      }
+             *  example: 
+             *      html:
+             *          <div class="custom-select-container" data-name="carBrand" data-default-value="品牌系列" data-placeholder="品牌系列">
+             *              <textarea style="display: none;">[{"id": "1", "name": "宝马"}, {"id": "2", "name": "奥迪"}]</textarea>
+             *          </div>
+             *          <div class="custom-select-container" data-name="carPrice" data-default-value="价格区间" data-placeholder="价格区间">
+             *              <textarea style="display: none;">[{"id": "1", "name": "30-100万"}, {"id": "2", "name": "100-300万"}]</textarea>
+             *          </div>
+             *      js:
+             *          $('.custom-select-container').each(function() {
+             *              new CustomSelect({
+             *                  container: this,
+             *                  change: function(value) {
+             *                      // value it means id
+             *                      // query data ...
+             *                  }
+             *              });
+             *          });
+             *
+             */
+
+            function CustomSelect(options) {
+                this.options = $.extend({}, options || {});
+                this.init();
+            }
+
+            // 原型
+            CustomSelect.prototype = {
+                constructor: CustomSelect,
+                keywords: '',
+                init: function() {
+                    if (!this.options || !this.options.container) return;
+                    this.initContainer();
+                    this.listenFocus();
+                    this.listenBlur();
+                    this.listenSearch();
+                    this.listenTrigger();
+                    this.listenSelect();
+                    this.listenMouseenter();
+                    this.listenBodyClick();
+                    this.listenPaste();
+                },
+                initContainer: function() {
+                    this.$container = $(this.options.container).addClass('custom-select-container');
+                    var tpl = '<div class="custom-select-input-wrap">' +
+                        '<input type="text" class="custom-select-input" value="' + (this.$container.data('default-value')) +
+                        '" placeholder="' + (this.$container.data('placeholder')) + '">' +
+                        '<div class="list-toggle-trigger"><i></i></div>' +
+                        '</div>' +
+                        '<div class="custom-select-list"></div>';
+
+                    this.dataList = jsonParse(this.$container.find('textarea')[0].value);
+                    this.$container.html(tpl);
+                    this.$input = this.$container.find('.custom-select-input');
+                    this.$list = this.$container.find('.custom-select-list');
+                    this.$filterList = $();
+                    this.$trigger = this.$container.find('.list-toggle-trigger');
+
+                    this.defaltValue = this.$container.data('default-value');
+                    this.$container.data({
+                        'customSelect': this,
+                        'value': ''
+                    });
+                },
+
+                _isRended: false,
+                _isResetSize: false,
+                _highlightIndex: -1,
+                _seletedIndex: -1,
+
+                highlight: function(idx) {
+                    idx = idx !== undefined && idx > -1 ? idx : this._highlightIndex;
+                    idx >= 0 && this.$filterList.children().removeClass('hover').eq(idx).addClass('hover');
+                },
+                renderList: function(list) {
+                    var listTpl = '',
+                        len = list.length;
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            listTpl += '<span data-value="' + list[i].id + '">' + list[i].name + '</span>';
+                        }
+                        this.$list.html(listTpl).slideDown('fast');
+                    } else {
+                        this.$list.html(listTpl).hide();
+                    }
+                    this.filterDataList = list;
+                    this._isRended = true;
+                    if (!this._isResetSize) {
+                        this._isResetSize = true;
+                        this.$list.css({
+                            width: this.$list[0].scrollWidth + 25 + 'px'
+                        });
+                    }
+                },
+                search: function() {
+                    if (this.keywords === '' || this.keywords === this.defaltValue) {
+                        this.$input.val('');
+                        this.renderList(this.dataList);
+                        this.$filterList = this.$list;
+                        return;
+                    }
+                    var searchList = [];
+                    var len = this.dataList.length;
+                    var reg = new RegExp(this.keywords, 'i');
+
+                    for (var i = 0; i < len; i++) {
+                        var dataItem = this.dataList[i];
+                        dataItem.name.match(reg) && (searchList.push(dataItem));
+                        this.$filterList = this.$filterList.add(this.$list.eq(i));
+                    }
+                    this.renderList(searchList);
+                },
+                listenFocus: function() {
+                    var self = this;
+                    this.$input.on('focus', function() {
+                        if (self._isRended && self.filterDataList.length > 0) {
+                            self.highlight(self._seletedIndex);
+                            self.$list.slideDown('fast');
+                            self.keywords === '' && self.$input.val('');
+                            return;
+                        }
+                        self.search();
+                    });
+                },
+                listenBlur: function() {
+                    var self = this;
+                    this.$input.on('blur', function() {
+                        if (self.filterDataList.length === 0) {
+                            self.$input.val(self.defaltValue);
+                            self.keywords = '';
+                        } else if ($.trim(self.$input.val()) === '') {
+                            self.$input.val(self.defaltValue);
+                        }
+                    });
+                },
+                keyboardSelect: function(code) {
+                    if (code === 38) {
+                        this._highlightIndex--;
+                        this._highlightIndex = this._highlightIndex < 0 ? 0 : this._highlightIndex;
+                        this.highlight();
+                    } else if (code === 40) {
+                        this._highlightIndex++;
+                        this._highlightIndex = this._highlightIndex > (this.filterDataList.length - 1) ? (this.filterDataList.length - 1) : this._highlightIndex;
+                        this.highlight();
+                    }
+                    this._seletedIndex = this._highlightIndex;
+                },
+                listenSearch: function() {
+                    var self = this;
+                    this.$input.on('keyup', function(e) {
+                        var code = e.keyCode || e.which;
+                        self.keywords = $.trim(self.$input.val());
+
+                        if (code === 38 || code === 40) { // up down select
+                            self.keyboardSelect(code);
+                        } else if (code === 13 && self._highlightIndex >= 0) { // enter
+                            var selectObj = self.filterDataList[self._highlightIndex];
+                            self.$input.val(selectObj.name);
+                            self.$container.data('value', selectObj.id);
+
+                            self.options.change && self.options.change(self.$container.data('value'));
+                            self.$list.hide();
+                            self.$input.trigger('blur');
+                        } else {
+                            self.search();
+                        }
+                    });
+                },
+                listenTrigger: function() {
+                    var self = this;
+                    this.$trigger.on('click', function() {
+                        var $this = $(this);
+                        if (self._isRended && self.filterDataList.length > 0) {
+                            self.$list.slideToggle('fast');
+                        } else {
+                            self.$input.trigger('focus');
+                        }
+                    });
+                },
+                listenSelect: function() {
+                    var self = this;
+                    this.$container.on('click', '[data-value]', function() {
+                        var $this = $(this),
+                            value = $this.data('value');
+
+                        self.$input.val($this.text());
+                        self.keywords = $this.text();
+
+                        self.$list.hide();
+                        self.$container.data('value', value);
+                        self.options.change && self.options.change(value);
+                        self._seletedIndex = self.$filterList.children().index(this);
+                    });
+                },
+                listenMouseenter: function() {
+                    var self = this;
+                    this.$container
+                        .on('mouseenter', '[data-value]', function() {
+                            var $childs = self.$filterList.children();
+                            var i = self._highlightIndex = $childs.index(this);
+                            $childs.removeClass('hover').eq(i).addClass('hover');
+                        });
+                },
+                listenBodyClick: function() {
+                    var self = this;
+                    $('body').on('click', function(e) {
+                        if ($(e.target).parents('.custom-select-container')[0] !== self.$container[0]) {
+                            self.$list.hide();
+                        }
+                    });
+                },
+                listenPaste: function() {
+                    var self = this;
+                    addEvent(this.$input[0], 'paste', function(e) {
+                        var clipboardData = e.clipboardData || window.clipboardData;
+                        var clipValue = clipboardData.getData('text');
+
+                        self.keywords = self.getValueAsPaste(clipValue);
+                        self.search();
+                    });
+                },
+                getValueAsPaste: function(pasteText) {
+                    var existingVal = this.$input.val();
+                    var length = existingVal.length;
+                    var start = this.getSelectionStart(this.$input[0]);
+                    var value = '';
+
+                    if (start === undefined) return existingVal;
+
+                    if (start > 0) {
+                        if (start < length) {
+                            value = existingVal.substring(0, start) + pasteText + existingVal.substring(start, length);
+                        } else if (start === length) {
+                            value = existingVal.substring(0, start) + pasteText;
+                        }
+                    } else {
+                        value = pasteText + existingVal.substring(0, length);
+                    }
+
+                    return value;
+                },
+                getSelectionStart: function(el) {
+                    if (el.selectionStart) {
+                        return el.selectionStart;
+                    } else if (document.selection) {
+                        el.focus();
+
+                        var r = document.selection.createRange();
+                        if (!r) return 0;
+
+                        var re = el.createTextRange(),
+                            rc = re.duplicate();
+
+                        re.moveToBookmark(r.getBookmark());
+                        rc.setEndPoint('EndToStart', re);
+
+                        return rc.text.length;
+                    }
+                    return 0;
+                }
+            };
+
+            window.CustomSelect = CustomSelect;
+            
+        }(jQuery));
+
+        $('.custom-select-container').each(function() {
+            new CustomSelect({
+                container: this,
+                change: function(value) {
+                    // value it means id
+                    // query data ...
+
+                    // test code
+                    alert(value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
