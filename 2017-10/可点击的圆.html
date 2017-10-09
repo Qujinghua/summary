@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <title>Document</title>
+  <style>
+  #blue{
+    cursor:pointer;
+    width:100px;
+    height:100px;
+  }
+  #red{
+    cursor: pointer;
+    background: red;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+
+  }
+  
+  </style>
+</head>
+<body>
+  <!-- 三种做法。
+  纯html: map+area;
+  纯CSS: border-radius: 50%;
+  纯js: 利用点在圆内点在圆外 -->
+  
+  <!-- 第一种 使用image map -->
+  <img id="blue" class="click-area" src="#" usemap="#Map" /> 
+  <map name="Map" id="Map" class="click-area">  <area shape="circle" coords="50,50,50"/>
+  </map>
+  <!-- 第二种 使用CSS border-radius -->
+  <div id="red" class="click-area" ></div>
+  <!-- 第三种 使用js检测鼠标位置 -->
+  <div id="yellow" class="click-area" ></div>
+
+  <script>
+$("#yellow").on('click',function(e) {    
+  var r = 50; 
+  var x1 = $(this).offset().left+$(this).width()/2;            
+  var y1 = $(this).offset().top+$(this).height()/2;   
+  var x2= e.clientX;  
+  var y2= e.clientY;    
+  var distance = Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));    
+  if (distance <= 50)  
+    alert("Yes!");    
+});  
+
+// var module1 = (function(){
+// 　var _count = 0;
+// 　var m1 = function(){
+// 　　//...
+// 　};
+// 　var m2 = function(){
+// 　　//...
+//   };
+// 　return {
+// 　　m1 : m1,
+// 　　m2 : m2
+// 　};
+// })();
+// // 使用
+// module1.m1();
+// module1.m2();
+
+  </script>
+
+
+<!-- <div id="test"></div>
+<input type="button" value="点击显示" onclick="show()"/>
+<script type="text/x-template" id="test-img">
+  <div>
+    <img style="width:500px;" src="http://image.jjmh.com/file/userfiles/images/2017031514151521166.jpg" />
+  </div>
+</script>
+<script>
+  function show(){
+    var testBox = document.getElementById('test');
+    var testImg = document.getElementById('test-img');
+    testBox.innerHTML = testImg.innerHTML;
+  }
+</script> -->
+　
+</body>
+</html>
